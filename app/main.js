@@ -7,7 +7,7 @@ var fs = require('fs');
 const ipcMain = require('electron').ipcMain;
 const clipboard = require('electron').clipboard;
 const appName = 'myNotebook';
-var lunr_index;
+//var lunr_index;
 
 // Module to control application life.
 const app = electron.app;
@@ -31,9 +31,9 @@ db = {};
 db.posts = new nedb({ filename: path.join(data_path, 'posts.db'), autoload: true });
 
 // setup lunr indexing
-lunr_index = lunr(function () {
-    this.field('post_body', { boost: 10 });
-});
+// lunr_index = lunr(function () {
+//     this.field('post_body', { boost: 10 });
+// });
 
 function createWindow() {
     // Create the browser window.
@@ -87,7 +87,7 @@ function createWindow() {
                 "post_body": posts.post_body,
                 "id": posts._id
             };        
-            lunr_index.add(doc);
+            //lunr_index.add(doc);
         });
     });
 }
@@ -188,9 +188,9 @@ ipcMain.on('backupData', function (event, args) {
 ipcMain.on('queryPosts', function (event, args) {
     // we strip the ID's from the lunr index search
 	var lunr_id_array = new Array();
-	lunr_index.search(args.search_term).forEach(function(id) {
-		lunr_id_array.push(id.ref);
-	});
+	// lunr_index.search(args.search_term).forEach(function(id) {
+	// 	lunr_id_array.push(id.ref);
+	// });
     
     db.posts.find({ _id: { $in: lunr_id_array}}).sort({post_date: -1}).exec(function (err, posts) {
         event.sender.send('gotSearch', posts);
@@ -206,7 +206,7 @@ function update_lunr(post){
     };
     
     // update the index
-    lunr_index.update(lunr_doc, false);
+    //lunr_index.update(lunr_doc, false);
 }
 
 // get X amount of posts. Can also skip for pagination
