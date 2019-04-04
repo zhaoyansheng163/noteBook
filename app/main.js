@@ -29,6 +29,7 @@ var nedb = require('nedb');
 //var db = new nedb();
 var db = {};
 db.posts = new nedb({ filename: path.join(data_path, 'posts.db'), autoload: true });
+db.menus = new nedb({ filename: path.join(data_path, 'menus.db'), autoload: true });
 
 // setup lunr indexing
 var lunr_index = lunr(function () {
@@ -242,6 +243,25 @@ ipcMain.on('insertQuery', function (event, doc) {
         
         // send the result
         event.sender.send('docInserted', data);
+    });
+});
+// inserts a menu
+ipcMain.on('insertMenuQuery', function (event, doc) {
+    db.menus.insert(doc, function (err, newDoc) {
+        var data = {}; 
+        data.result = true;
+        if(err){
+            data.result = false;
+        }
+        
+        // set the ID to return
+        data._id = newDoc._id;
+        
+        // update the lunr index
+        //update_lunr(newDoc);
+        
+        // send the result
+        //event.sender.send('docInserted', data);
     });
 });
 

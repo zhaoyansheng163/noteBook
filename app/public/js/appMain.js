@@ -24,6 +24,10 @@ myapp.config(function($routeProvider) {
             templateUrl : 'views/new.html',
             controller  : 'newController'
         })
+        .when('/newmenu', {
+            templateUrl : 'views/newmenu.html',
+            controller  : 'newmenuController'
+        })
         
         .when('/view/:doc_id', {
             templateUrl : 'views/view.html',
@@ -128,7 +132,6 @@ myapp.controller('editController', function($scope, $routeParams, $timeout) {
 // new post
 myapp.controller('newController', function($scope, $timeout) {
     addEditorPreview();
-    
     // add img-responsive class
     $timeout(function(){
         $("img").addClass("img-responsive");
@@ -153,6 +156,28 @@ myapp.controller('newController', function($scope, $timeout) {
     $("#btnPostPaste").click(function() {
         // send the delete command. A confirm dialog is shown from the main
         ipcRenderer.send('writeImage', ''); 
+    });
+});
+
+// new menu
+myapp.controller('newmenuController', function($scope, $timeout) {
+    //addEditorPreview();
+    $("#btnMenuInsert").click(function() {
+        if($("#name").val().length > 2 && $("#pid").val().length > 0 && $("#deepth").val().length > 0){
+            var doc = {};
+            doc.name = $("#name").val();
+            doc.pid = $("#pid").val();
+            doc.deepth = $("#deepth").val();
+            doc.menu_date = Date.now();
+            
+            // send the insert message
+            ipcRenderer.send('insertMenuQuery', doc);
+            
+            // Update the recent docs
+            //ipcRenderer.send('getRecents', '');
+        }else{
+            show_notification("Please enter some content","danger");
+        }
     });
 });
 

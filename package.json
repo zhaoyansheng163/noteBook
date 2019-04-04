@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "electron ./app",
     "devlog": "electron ./app --enable-logging",
+    "package": "electron-packager ./ app --platform=win32 --arch=x64 --version=1.0.0",
     "clean": "rm -rf ./dist",
     "clean:osx": "rm -rf ./dist/osx",
     "clean:win": "rm -rf ./dist/win",
