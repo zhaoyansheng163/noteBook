@@ -26,8 +26,8 @@ let mainWindow;
 
 // setup the db
 var nedb = require('nedb');
-var db = new nedb();
-db = {};
+//var db = new nedb();
+var db = {};
 db.posts = new nedb({ filename: path.join(data_path, 'posts.db'), autoload: true });
 
 // setup lunr indexing
