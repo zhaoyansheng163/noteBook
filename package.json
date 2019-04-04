@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "dev": "electron ./app",
+    "devlog": "electron ./app --enable-logging",
     "clean": "rm -rf ./dist",
     "clean:osx": "rm -rf ./dist/osx",
     "clean:win": "rm -rf ./dist/win",

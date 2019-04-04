@@ -88,7 +88,6 @@ myapp.controller('editController', function($scope, $routeParams, $timeout) {
     var args = {};
     args.doc_id = $routeParams.doc_id;
     args.caller = 'gotOneEdit';
-
     ipcRenderer.send('getOne', args);
     
     // add img-responsive class
@@ -103,7 +102,8 @@ myapp.controller('editController', function($scope, $routeParams, $timeout) {
             doc.post_body = $("#editor").val();
             doc._id = $routeParams.doc_id;
             doc.post_date = Date.now();
-            
+
+            console.log(doc._id)
             // send the update message
             ipcRenderer.send('updateQuery', doc);
             
