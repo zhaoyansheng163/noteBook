@@ -247,54 +247,26 @@ ipcMain.on('insertQuery', function (event, doc) {
 
 // updates a document
 ipcMain.on('updateQuery', function (event, doc) {   
-    db.posts.remove({ _id: doc._id }, {}, function (err, numRemoved) {
+    db.posts.update({ _id: doc._id }, doc , {}, function (err, numReplaced) {
+        // default to true
         var result = true;
+        
+        // set result to false if an error occurs
         if(err){
             result = false;
-        }
-        if(numRemoved == 0){
-            result = false;
-        }
-        event.sender.send('postDeleted', result);
-    });
-    
-
-    db.posts.insert(doc, function (err, newDoc) {
-        var data = {}; 
-        data.result = true;
-        if(err){
-            data.result = false;
         }
         
-        // set the ID to return
-        data._id = newDoc._id;
+        // set result to false if no docs are updated
+        if(numReplaced == 0){
+            result = false;
+        }
         
         // update the lunr index
-        update_lunr(newDoc);
+        update_lunr(doc);
         
-        // send the result
-        event.sender.send('docInserted', data);
+        // send the updated doc
+        event.sender.send('docUpdated', result);
     });
-    // db.posts.update({ _id: doc._id }, doc , {}, function (err, numReplaced) {
-    //     // default to true
-    //     var result = true;
-        
-    //     // set result to false if an error occurs
-    //     if(err){
-    //         result = false;
-    //     }
-        
-    //     // set result to false if no docs are updated
-    //     if(numReplaced == 0){
-    //         result = false;
-    //     }
-        
-    //     // update the lunr index
-    //     update_lunr(doc);
-        
-    //     // send the updated doc
-    //     event.sender.send('docUpdated', result);
-    // });
 });
 
 // gets post by ID
