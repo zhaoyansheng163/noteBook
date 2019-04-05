@@ -5,7 +5,10 @@ var shell = require('electron').shell;
 var paginate_start = 5;
 
 // get recent posts for sidebar menu
-ipcRenderer.send('getRecents', '');
+//ipcRenderer.send('getRecents', '');
+
+// get recent posts for sidebar menu
+ipcRenderer.send('getMenus', '');
 
 // configure our routes
 myapp.config(function($routeProvider) {
@@ -174,7 +177,7 @@ myapp.controller('newmenuController', function($scope, $timeout) {
             ipcRenderer.send('insertMenuQuery', doc);
             
             // Update the recent docs
-            //ipcRenderer.send('getRecents', '');
+            ipcRenderer.send('getMenus', '');
         }else{
             show_notification("Please enter some content","danger");
         }
@@ -354,6 +357,32 @@ ipcRenderer.on('gotRecents', function(event, data) {
             var mark_it_down = window.markdownit({ html: true,linkify: true,typographer: true, breaks: true});
             var body_html = mark_it_down.render(value.post_body);
             var first_line = body_html.split('\n')[0];
+            var stripped = strip_tags(first_line);
+            var html = '<li class="list-group-item"><i class="fa fa-chevron-right"></i>&nbsp;&nbsp;<a href="#view/'+ value._id + '">'+ stripped.substring(0, 20) + '</a></li>';
+            $('.sidebar').append(html);
+        });
+    }
+});
+
+// return of getMenus
+ipcRenderer.on('gotMenus', function(event, data) {
+    // empty sidebar
+    $('.sidebar').empty();
+    
+    // add heading
+    var html = '<li class="list-group-item list-group-item-danger">Menu</li>';
+    $('.sidebar').append(html);
+    
+    // no posts so we add a no recent posts item
+    console.log(data.length)
+    if(data.length == 0){
+        $('.sidebar').append('<li class="list-group-item">No Menus</li>');
+    }else{
+        // add recent posts
+        $.each(data, function(key, value) {
+            var mark_it_down = window.markdownit({ html: true,linkify: true,typographer: true, breaks: true});
+            var name = mark_it_down.render(value.name);
+            var first_line = name.split('\n')[0];
             var stripped = strip_tags(first_line);
             var html = '<li class="list-group-item"><i class="fa fa-chevron-right"></i>&nbsp;&nbsp;<a href="#view/'+ value._id + '">'+ stripped.substring(0, 20) + '</a></li>';
             $('.sidebar').append(html);

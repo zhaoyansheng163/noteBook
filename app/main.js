@@ -226,6 +226,13 @@ ipcMain.on('getRecents', function (event, arg) {
     });
 });
 
+// get last 10 menus
+ipcMain.on('getMenus', function (event, arg) {
+    db.menus.find({}).sort({ menu_date: -1 }).limit(10).exec(function (err, menus) {
+        event.sender.send('gotMenus', menus);
+    });
+});
+
 // inserts a doc
 ipcMain.on('insertQuery', function (event, doc) {
     db.posts.insert(doc, function (err, newDoc) {
