@@ -8,7 +8,7 @@ var paginate_start = 5;
 //ipcRenderer.send('getRecents', '');
 
 // get recent posts for sidebar menu
-ipcRenderer.send('getMenus', '');
+ipcRenderer.send('getMenus', {'pid':"0"});
 
 // configure our routes
 myapp.config(function($routeProvider) {
@@ -176,8 +176,8 @@ myapp.controller('newmenuController', function($scope, $timeout) {
             // send the insert message
             ipcRenderer.send('insertMenuQuery', doc);
             
-            // Update the recent docs
-            ipcRenderer.send('getMenus', '');
+            // Update the recent docs  第几层的目录就更新第几层的
+            ipcRenderer.send('getMenus', {'pid':"0"});
         }else{
             show_notification("Please enter some content","danger");
         }
