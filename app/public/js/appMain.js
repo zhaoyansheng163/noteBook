@@ -22,6 +22,10 @@ myapp.config(function($routeProvider) {
             templateUrl : 'views/edit.html',
             controller  : 'editController'
         })
+        .when('/editMenu/:doc_id', {
+            templateUrl : 'views/editMenu.html',
+            controller  : 'editMenuController'
+        })
 
         .when('/new', {
             templateUrl : 'views/new.html',
@@ -90,7 +94,7 @@ myapp.controller('viewController', function($scope, $routeParams, $timeout) {
 // edit an existing post
 myapp.controller('editController', function($scope, $routeParams, $timeout) {
     addEditorPreview();
-    
+    console.log('editpost ----------------');
     // set up the args for the query
     var args = {};
     args.doc_id = $routeParams.doc_id;
@@ -109,13 +113,65 @@ myapp.controller('editController', function($scope, $routeParams, $timeout) {
             doc.post_body = $("#editor").val();
             doc._id = $routeParams.doc_id;
             doc.post_date = Date.now();
+            doc.pid = $("#pid").val();
+            doc.deepth = $("#deepth").val();
+            doc.type = "0";
 
             console.log(doc._id)
             // send the update message
             ipcRenderer.send('updateQuery', doc);
             
             // Update the recent docs
-            ipcRenderer.send('getRecents', ''); 
+            ipcRenderer.send('getMenus', {'pid':"0"}); 
+        }else{
+            show_notification("Please enter some content","danger");
+        }
+    });
+    
+    $("#btnPostDelete").click(function() {
+        // send the delete command. A confirm dialog is shown from the main
+        ipcRenderer.send('deletePost', {'doc_id': $routeParams.doc_id});
+    });
+    
+    $("#btnPostPaste").click(function() {
+        // send the delete command. A confirm dialog is shown from the main
+        ipcRenderer.send('writeImage', ''); 
+    });
+});
+
+
+// edit an existing menu
+myapp.controller('editMenuController', function($scope, $routeParams, $timeout) {
+    addEditorPreview();
+    
+    // set up the args for the query
+    console.log('editmenu ----------------');
+    var args = {};
+    args.doc_id = $routeParams.doc_id;
+    args.caller = 'gotOneEdit';
+    ipcRenderer.send('getOne', args);
+    
+    // add img-responsive class
+    $timeout(function(){
+        $("img").addClass("img-responsive");
+    });
+    
+    $("#btnMenuSave").click(function() {
+        if($("#editor").val().length > 2){
+            // construct the update doc
+            var doc = {};
+            doc.post_body = $("#editor").val();
+            doc._id = $routeParams.doc_id;
+            doc.post_date = Date.now();
+            doc.pid = $("#pid").val();
+            doc.deepth = $("#deepth").val();
+            doc.type = "1";
+            console.log(doc._id)
+            // send the update message
+            ipcRenderer.send('updateQuery', doc);
+            
+            // Update the recent docs
+            ipcRenderer.send('getMenus', {'pid':"0"}); 
         }else{
             show_notification("Please enter some content","danger");
         }
@@ -141,16 +197,18 @@ myapp.controller('newController', function($scope, $timeout) {
     });
     
     $("#btnPostInsert").click(function() {
-        if($("#editor").val().length > 5){
+        if($("#editor").val().length > 2){
             var doc = {};
             doc.post_body = $("#editor").val();
             doc.post_date = Date.now();
-            
+            doc.pid = $("#pid").val();
+            doc.deepth = $("#deepth").val();
+            doc.type = "0";
             // send the insert message
             ipcRenderer.send('insertQuery', doc);
             
             // Update the recent docs
-            ipcRenderer.send('getRecents', '');
+            ipcRenderer.send('getMenus', {'pid':"0"});
         }else{
             show_notification("Please enter some content","danger");
         }
@@ -168,13 +226,14 @@ myapp.controller('newmenuController', function($scope, $timeout) {
     $("#btnMenuInsert").click(function() {
         if($("#name").val().length > 2 && $("#pid").val().length > 0 && $("#deepth").val().length > 0){
             var doc = {};
-            doc.name = $("#name").val();
+            doc.post_body = $("#name").val();
             doc.pid = $("#pid").val();
             doc.deepth = $("#deepth").val();
-            doc.menu_date = Date.now();
+            doc.type = "1";
+            doc.post_date = Date.now();
             
             // send the insert message
-            ipcRenderer.send('insertMenuQuery', doc);
+            ipcRenderer.send('insertQuery', doc);
             
             // Update the recent docs  第几层的目录就更新第几层的
             ipcRenderer.send('getMenus', {'pid':"0"});
@@ -311,6 +370,8 @@ ipcRenderer.on('gotOneEdit', function(event, data) {
         var mark_it_down = window.markdownit({ html: true,linkify: true,typographer: true, breaks: true});
         var html = mark_it_down.render(data.post_body);
         $("#editor").val(data.post_body);
+        $("#pid").val(data.pid);
+        $("#deepth").val(data.deepth);
         $("#preview").html(html);
     }else{
         show_notification("Post could not be found", "danger");
@@ -381,7 +442,7 @@ ipcRenderer.on('gotMenus', function(event, data) {
         // add recent posts
         $.each(data, function(key, value) {
             var mark_it_down = window.markdownit({ html: true,linkify: true,typographer: true, breaks: true});
-            var name = mark_it_down.render(value.name);
+            var name = mark_it_down.render(value.post_body);
             var first_line = name.split('\n')[0];
             var stripped = strip_tags(first_line);
             var html = '<li class="list-group-item"><i class="fa fa-chevron-right"></i>&nbsp;&nbsp;<a href="#view/'+ value._id + '">'+ stripped.substring(0, 20) + '</a></li>';
