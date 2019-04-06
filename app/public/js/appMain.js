@@ -94,7 +94,7 @@ myapp.controller('viewController', function($scope, $routeParams, $timeout) {
 // edit an existing post
 myapp.controller('editController', function($scope, $routeParams, $timeout) {
     addEditorPreview();
-    console.log('editpost ----------------');
+    console.log('enter editpostController ----------------');
     // set up the args for the query
     var args = {};
     args.doc_id = $routeParams.doc_id;
@@ -102,9 +102,9 @@ myapp.controller('editController', function($scope, $routeParams, $timeout) {
     ipcRenderer.send('getOne', args);
     
     // add img-responsive class
-    $timeout(function(){
-        $("img").addClass("img-responsive");
-    });
+    // $timeout(function(){
+    //     $("img").addClass("img-responsive");
+    // });
     
     $("#btnPostSave").click(function() {
         if($("#editor").val().length > 5){
@@ -142,19 +142,19 @@ myapp.controller('editController', function($scope, $routeParams, $timeout) {
 
 // edit an existing menu
 myapp.controller('editMenuController', function($scope, $routeParams, $timeout) {
-    addEditorPreview();
+    addMenuEditorPreview();
     
     // set up the args for the query
-    console.log('editmenu ----------------');
+    console.log('editmenuController ----------------');
     var args = {};
     args.doc_id = $routeParams.doc_id;
     args.caller = 'gotOneEdit';
     ipcRenderer.send('getOne', args);
     
     // add img-responsive class
-    $timeout(function(){
-        $("img").addClass("img-responsive");
-    });
+    // $timeout(function(){
+    //     $("img").addClass("img-responsive");
+    // });
     
     $("#btnMenuSave").click(function() {
         if($("#editor").val().length > 2){
@@ -224,9 +224,9 @@ myapp.controller('newController', function($scope, $timeout) {
 myapp.controller('newmenuController', function($scope, $timeout) {
     //addEditorPreview();
     $("#btnMenuInsert").click(function() {
-        if($("#name").val().length > 2 && $("#pid").val().length > 0 && $("#deepth").val().length > 0){
+        if($("#editor").val().length > 2 && $("#pid").val().length > 0 && $("#deepth").val().length > 0){
             var doc = {};
-            doc.post_body = $("#name").val();
+            doc.post_body = $("#editor").val();
             doc.pid = $("#pid").val();
             doc.deepth = $("#deepth").val();
             doc.type = "1";
@@ -476,9 +476,16 @@ function get_more_posts(){
 // render the post body
 function render_post(post){
     // writes out the post html
+    var editStr = "edit";
+    if(post.type == "1"){
+        editStr = "editMenu";
+        console.log('---------------render -menu');
+    }else{
+        console.log('--------------render --post');
+    }
     var html = "<div class='post_header_row col-sm-12 col-md-12 col-lg-12'>";
     html += "<span class='text-muted pull-left'>" + moment(post.post_date).format("dddd, MMMM Do YYYY h:mma") + "</span>";
-    html += "<a class='pull-right' href='#edit/" + post._id + "'><i class='icon_pad fa fa-pencil'></i></a>";
+    html += "<a class='pull-right' href='#" + editStr+ "/" + post._id + "'><i class='icon_pad fa fa-pencil'></i></a>";
     html += "<a class='pull-right' href='#view/" + post._id + "'><i class='icon_pad fa fa-eye'></i></a>";
     html += "</div>";
     html += "<div class='post_body_row col-sm-12 col-md-12 col-lg-12'>";
@@ -514,6 +521,11 @@ function addEditorPreview(){
     
     convertTextAreaToMarkdown();
     $("img").addClass("img-responsive");
+}
+
+// links up the preview div to live update from the editor textarea
+function addMenuEditorPreview(){
+    
 }
 
 // converts markdown string to html

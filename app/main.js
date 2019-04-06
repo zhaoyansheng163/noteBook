@@ -213,6 +213,7 @@ function update_lunr(post){
 ipcMain.on('getPosts', function (event, args) {
     var start = args.start ? args.start : 0;
     var limit = args.limit ? args.limit : 5;
+    console.log('ipcMain getPosts:' + args.caller);
     db.posts.find({}).sort({ post_date: -1 }).skip(start).limit(limit).exec(function (err, posts) {
         event.sender.send(args.caller, posts);
     });
