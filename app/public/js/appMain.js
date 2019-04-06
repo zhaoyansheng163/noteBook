@@ -39,6 +39,11 @@ myapp.config(function($routeProvider) {
         .when('/view/:doc_id', {
             templateUrl : 'views/view.html',
             controller  : 'viewController'
+        })
+        
+        .when('/viewMenu/:doc_id', {
+            templateUrl : 'views/viewMenu.html',
+            controller  : 'viewMenuController'
         });
 });
 
@@ -89,6 +94,12 @@ myapp.controller('viewController', function($scope, $routeParams, $timeout) {
     $timeout(function(){
         $("img").addClass("img-responsive");
     }); 
+});
+
+// view an individual post
+myapp.controller('viewMenuController', function($scope, $routeParams, $timeout) {
+    // set up the args for the query
+    console.log('-----------:viewMenu');
 });
 
 // edit an existing post
@@ -441,11 +452,15 @@ ipcRenderer.on('gotMenus', function(event, data) {
     }else{
         // add recent posts
         $.each(data, function(key, value) {
+            var viewStr = "view/";
+            if(value.type == "1"){
+                viewStr = "viewMenu/"
+            }
             var mark_it_down = window.markdownit({ html: true,linkify: true,typographer: true, breaks: true});
             var name = mark_it_down.render(value.post_body);
             var first_line = name.split('\n')[0];
             var stripped = strip_tags(first_line);
-            var html = '<li class="list-group-item"><i class="fa fa-chevron-right"></i>&nbsp;&nbsp;<a href="#view/'+ value._id + '">'+ stripped.substring(0, 20) + '</a></li>';
+            var html = '<li class="list-group-item"><i class="fa fa-chevron-right"></i>&nbsp;&nbsp;<a href="#' + viewStr + value._id + '">'+ stripped.substring(0, 20) + '</a></li>';
             $('.sidebar').append(html);
         });
     }
