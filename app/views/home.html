@@ -8,15 +8,10 @@
                 window.console && console.log(m) || alert(m); 
             },
             items: {
-                "edit": {name: "Edit", icon: "edit"},
-                "cut": {name: "Cut", icon: "cut"},
-               copy: {name: "Copy", icon: "copy"},
-                "paste": {name: "Paste", icon: "paste"},
-                "delete": {name: "Delete", icon: "delete"},
-                "sep1": "---------",
-                "quit": {name: "Quit", icon: function(){
-                    return 'context-menu-icon context-menu-icon-quit';
-                }}
+                "New child post": {name: "Newpost", icon: "edit"},
+                "New child menu": {name: "Newmenu", icon: "cut"},
+                delete: {name: "Delete", icon: "delete"},
+                "rename": {name: "Rename", icon: "delete"}  
             }
         });
 
@@ -24,4 +19,5 @@
             console.log('clicked', this);
         })    
     });
+
 </script>
