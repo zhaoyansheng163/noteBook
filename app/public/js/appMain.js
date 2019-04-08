@@ -8,7 +8,7 @@ var paginate_start = 5;
 //ipcRenderer.send('getRecents', '');
 
 // get recent posts for sidebar menu
-ipcRenderer.send('getMenus', {'pid':"0"});
+ipcRenderer.send('getMenus');
 
 // configure our routes
 myapp.config(function($routeProvider) {
@@ -133,7 +133,7 @@ myapp.controller('editController', function($scope, $routeParams, $timeout) {
             ipcRenderer.send('updateQuery', doc);
             
             // Update the recent docs
-            ipcRenderer.send('getMenus', {'pid':"0"}); 
+            ipcRenderer.send('getMenus'); 
         }else{
             show_notification("Please enter some content","danger");
         }
@@ -182,7 +182,7 @@ myapp.controller('editMenuController', function($scope, $routeParams, $timeout) 
             ipcRenderer.send('updateQuery', doc);
             
             // Update the recent docs
-            ipcRenderer.send('getMenus', {'pid':"0"}); 
+            ipcRenderer.send('getMenus'); 
         }else{
             show_notification("Please enter some content","danger");
         }
@@ -219,7 +219,7 @@ myapp.controller('newController', function($scope, $timeout) {
             ipcRenderer.send('insertQuery', doc);
             
             // Update the recent docs
-            ipcRenderer.send('getMenus', {'pid':"0"});
+            ipcRenderer.send('getMenus');
         }else{
             show_notification("Please enter some content","danger");
         }
@@ -247,7 +247,7 @@ myapp.controller('newmenuController', function($scope, $timeout) {
             ipcRenderer.send('insertQuery', doc);
             
             // Update the recent docs  第几层的目录就更新第几层的
-            ipcRenderer.send('getMenus', {'pid':"0"});
+            ipcRenderer.send('getMenus');
         }else{
             show_notification("Please enter some content","danger");
         }
@@ -465,11 +465,12 @@ ipcRenderer.on('gotMenus', function(event, data) {
             var html = '<li class="list-group-item"><i class="fa fa-chevron-right"></i>&nbsp;&nbsp;<a href="#' + viewStr + value._id + '">'+ stripped.substring(0, 20) + '</a></li>';
             $('.sidebar').append(html);
             
-            one['type'] = 'product';
-            one['pgid'] = '0';
+            one['type'] = value.type;
+            one['pgid'] = value.pid;
             one['name'] = stripped.substring(0, 20);
             one['id'] = value._id;
             data1.push(one);
+            console.log(JSON.stringify(one));
 
         });
         

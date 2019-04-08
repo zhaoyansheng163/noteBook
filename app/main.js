@@ -229,8 +229,7 @@ ipcMain.on('getRecents', function (event, arg) {
 // get last 10 menus
 ipcMain.on('getMenus', function (event, arg) {
     console.log('---------------------------000');
-    console.log(arg.pid);
-    db.posts.find({'pid':arg.pid}).sort({ post_date: -1 }).limit(10).exec(function (err, menus) {
+    db.posts.find(arg).sort({ post_date: -1 }).limit(10).exec(function (err, menus) {
         event.sender.send('gotMenus', menus);
     });
 });
