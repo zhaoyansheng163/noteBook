@@ -175,7 +175,6 @@ myapp.controller('editMenuController', function($scope, $routeParams, $timeout) 
             doc._id = $routeParams.doc_id;
             doc.post_date = Date.now();
             doc.pid = $("#pid").val();
-            doc.deepth = $("#deepth").val();
             doc.type = "1";
             console.log(doc._id)
             // send the update message
@@ -235,11 +234,10 @@ myapp.controller('newController', function($scope, $timeout) {
 myapp.controller('newmenuController', function($scope, $timeout) {
     //addEditorPreview();
     $("#btnMenuInsert").click(function() {
-        if($("#editor").val().length > 2 && $("#pid").val().length > 0 && $("#deepth").val().length > 0){
+        if($("#editor").val().length > 2 && $("#pid").val().length > 0){
             var doc = {};
             doc.post_body = $("#editor").val();
             doc.pid = $("#pid").val();
-            doc.deepth = $("#deepth").val();
             doc.type = "1";
             doc.post_date = Date.now();
             
