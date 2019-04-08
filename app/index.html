@@ -15,6 +15,13 @@
     <script src="public/js/paste.js"></script>
     <script src="public/js/appMain.js"></script>
     <script src="public/js/jquery.contextMenu.js"></script>
+    <link href="img/saas.css" rel="stylesheet" type="text/css" />
+    <link href="img/mask.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" src="Js/jquery.js"></script>
+    <script language="JavaScript" src="Js/jquery.mask.js"></script>
+    <script language="JavaScript" src="Js/jquery.contextmenu.js"></script>
+    <script language="JavaScript" src="Js/saas.js"></script>
+    <script language="JavaScript" src="Js/jqDnR.js"></script>
 </head>
 <body>
     <div class="container-fluid">
@@ -39,17 +46,9 @@
                     </span>
                 </div><br/>
                 <ul class="list-group list-group-sm sidebar"></ul>
-                <div class="settings-menu">
-                    <div class="dropup">
-                        <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="settingsMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Settings
-                            <span>&nbsp;<i class="fa fa-cog"></i></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="settingsMenu">
-                            <li><a href="#" onclick="cleanImages()">Cleanup images</a></li>
-                            <li><a href="#" onclick="backupData()">Backup data</a></li>
+                <div style="width:200px;border:1px solid #ccc">
+                        <ul id="browser"  class="treeview filetree">
                         </ul>
-                    </div>
                 </div>
             </div>
             <!-- MAIN CONTENT AND INJECTED VIEWS -->

@@ -451,7 +451,9 @@ ipcRenderer.on('gotMenus', function(event, data) {
         $('.sidebar').append('<li class="list-group-item">No Menus</li>');
     }else{
         // add recent posts
+        var data1=[];
         $.each(data, function(key, value) {
+            var one = {};
             var viewStr = "view/";
             if(value.type == "1"){
                 viewStr = "viewMenu/"
@@ -462,7 +464,43 @@ ipcRenderer.on('gotMenus', function(event, data) {
             var stripped = strip_tags(first_line);
             var html = '<li class="list-group-item"><i class="fa fa-chevron-right"></i>&nbsp;&nbsp;<a href="#' + viewStr + value._id + '">'+ stripped.substring(0, 20) + '</a></li>';
             $('.sidebar').append(html);
+            
+            one['type'] = 'product';
+            one['pgid'] = '0';
+            one['name'] = stripped.substring(0, 20);
+            one['id'] = value._id;
+            data1.push(one);
+
         });
+        
+        //var data1=[{"id":"36","name":"123","type":"product","pgid":"0"},{"id":"37","name":"124","type":"product","pgid":"36"}];
+        $('#browser').showTree({data:data1,bindings:{
+                                    'pg_update':{
+                                        val:'Edit',
+                                        ismy:1,
+                                        cb:function(t) {
+                                            alert('edit');
+                                        }
+                                    },
+                                    'pg_delete':{
+                                        val:'Delete',
+                                        ismy:1,
+                                        cb:function(t) {
+                                            alert('delete');
+                                        }
+                                    },
+                                    'pg_add':{
+                                        val:'Add',
+                                        ismy:1,
+                                        cb:function(t) {
+                                            alert('add');
+                                        }
+                                    }
+                                
+                            },callback:function(t){
+                                alert('this click');
+                            }});
+
     }
 });
 
