@@ -78,6 +78,9 @@ function createWindow() {
     mainWindow.on('closed', function () {
         mainWindow = null;
     });
+
+    //debug mode
+    //mainWindow.webContents.openDevTools();
     
     // get all posts on startup
     db.posts.find({}, function (err, post_list) {

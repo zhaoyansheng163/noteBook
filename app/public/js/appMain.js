@@ -435,7 +435,7 @@ ipcRenderer.on('gotRecents', function(event, data) {
 });
 
 // return of getMenus
-ipcRenderer.on('gotMenus', function(event, data) {
+ipcRenderer.on('gotMenus', function(event, dataV) {
     // empty sidebar
     $('.sidebar').empty();
     
@@ -444,13 +444,13 @@ ipcRenderer.on('gotMenus', function(event, data) {
     $('.sidebar').append(html);
     
     // no posts so we add a no recent posts item
-    console.log(data.length)
-    if(data.length == 0){
+    console.log(dataV.length)
+    if(dataV.length == 0){
         $('.sidebar').append('<li class="list-group-item">No Menus</li>');
     }else{
         // add recent posts
         var data1=[];
-        $.each(data, function(key, value) {
+        $.each(dataV, function(key, value) {
             var one = {};
             var viewStr = "view/";
             if(value.type == "1"){
@@ -468,7 +468,7 @@ ipcRenderer.on('gotMenus', function(event, data) {
             one['name'] = stripped.substring(0, 20);
             one['id'] = value._id;
             data1.push(one);
-            console.log(JSON.stringify(one));
+            //console.log(JSON.stringify(one));
 
         });
         
@@ -498,11 +498,29 @@ ipcRenderer.on('gotMenus', function(event, data) {
                                 
                             },callback:function(t){
                                 alert('this click');
+                                console.log(JSON.stringify(t));
+                                console.log(simpleStringify(this));
                             }});
 
     }
 });
 
+function simpleStringify (object){
+    var simpleObject = {};
+    for (var prop in object ){
+        if (!object.hasOwnProperty(prop)){
+            continue;
+        }
+        if (typeof(object[prop]) == 'object'){
+            continue;
+        }
+        if (typeof(object[prop]) == 'function'){
+            continue;
+        }
+        simpleObject[prop] = object[prop];
+    }
+    return JSON.stringify(simpleObject); // returns cleaned up JSON
+};
 // EVENT LISTENERS //
 
 // FUNCTIONS //
