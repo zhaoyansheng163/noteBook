@@ -485,6 +485,7 @@ ipcRenderer.on('gotMenus', function(event, dataV) {
         });
         
         //var data1=[{"id":"36","name":"123","type":"product","pgid":"0"},{"id":"37","name":"124","type":"product","pgid":"36"}];
+        $('#browser').empty();
         $('#browser').showTree({data:data1,bindings:{
                                     'pg_update':{
                                         val:'Edit',
@@ -620,12 +621,12 @@ function convertMarkdown(text){
 
 // show notification popup
 function show_notification(msg, type, timeout){
-    timeout = timeout || 1200;
+    timeout = timeout || 20;
     
     $("#notify_message").removeClass();
     $("#notify_message").addClass('notify_message-' + type);
     $("#notify_message").html(msg);
-    $('#notify_message').slideDown(600).delay(timeout).slideUp(600);
+    $('#notify_message').slideDown(600).slideUp(600);
 }
 
 // FUNCTIONS //
