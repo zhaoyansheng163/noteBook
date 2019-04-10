@@ -473,7 +473,7 @@ ipcRenderer.on('gotMenus', function(event, dataV) {
             var first_line = name.split('\n')[0];
             var stripped = strip_tags(first_line);
             var html = '<li class="list-group-item"><i class="fa fa-chevron-right"></i>&nbsp;&nbsp;<a href="#' + viewStr + value._id + '">'+ stripped.substring(0, 20) + '</a></li>';
-            $('.sidebar').append(html);
+            //$('.sidebar').append(html);
             
             one['type'] = value.type;
             one['pgid'] = value.pid;
