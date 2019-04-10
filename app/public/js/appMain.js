@@ -8,6 +8,8 @@ var paginate_start = 5;
 //ipcRenderer.send('getRecents', '');
 
 // get recent posts for sidebar menu
+console.log('---------------------------appMain.js  getMenus before' );
+
 ipcRenderer.send('getMenus');
 
 // configure our routes
@@ -133,6 +135,8 @@ myapp.controller('editController', function($scope, $routeParams, $timeout) {
             ipcRenderer.send('updateQuery', doc);
             
             // Update the recent docs
+            console.log('---------------------------appMain.js  editController btnPostSave  getMenus' );
+
             ipcRenderer.send('getMenus'); 
         }else{
             show_notification("Please enter some content","danger");
@@ -181,6 +185,8 @@ myapp.controller('editMenuController', function($scope, $routeParams, $timeout) 
             ipcRenderer.send('updateQuery', doc);
             
             // Update the recent docs
+            console.log('---------------------------appMain.js  editMenuController btnMenuSave  getMenus' );
+
             ipcRenderer.send('getMenus'); 
         }else{
             show_notification("Please enter some content","danger");
@@ -218,6 +224,8 @@ myapp.controller('newController', function($scope, $timeout) {
             ipcRenderer.send('insertQuery', doc);
             
             // Update the recent docs
+            console.log('---------------------------appMain.js  newController btnPostInsert  getMenus' );
+
             ipcRenderer.send('getMenus');
         }else{
             show_notification("Please enter some content","danger");
@@ -245,6 +253,8 @@ myapp.controller('newmenuController', function($scope, $timeout) {
             ipcRenderer.send('insertQuery', doc);
             
             // Update the recent docs  第几层的目录就更新第几层的
+            console.log('---------------------------appMain.js  newmenuController btnPostInsert  getMenus' );
+
             ipcRenderer.send('getMenus');
         }else{
             show_notification("Please enter some content","danger");
@@ -436,6 +446,8 @@ ipcRenderer.on('gotRecents', function(event, data) {
 
 // return of getMenus
 ipcRenderer.on('gotMenus', function(event, dataV) {
+    console.log('---------------------------appMain.js ipcRenderer.on gotMenus' );
+
     // empty sidebar
     $('.sidebar').empty();
     
@@ -585,9 +597,9 @@ function addEditorPreview(){
     }
     
     // on input change, call the function to convert
-    $('#editor').on("input", function() {
-        convertTextAreaToMarkdown();
-    });
+    // $('#editor').on("input", function() {
+    //     convertTextAreaToMarkdown();
+    // });
     
     convertTextAreaToMarkdown();
     $("img").addClass("img-responsive");

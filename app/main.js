@@ -214,6 +214,7 @@ function update_lunr(post){
 
 // get X amount of posts. Can also skip for pagination
 ipcMain.on('getPosts', function (event, args) {
+    console.log('---------------------------main.js getPosts' );
     var start = args.start ? args.start : 0;
     var limit = args.limit ? args.limit : 5;
     console.log('ipcMain getPosts:' + args.caller);
@@ -224,6 +225,7 @@ ipcMain.on('getPosts', function (event, args) {
 
 // get last 10 docs
 ipcMain.on('getRecents', function (event, arg) {
+    console.log('---------------------------main.js getRecents' );
     db.posts.find({}).sort({ post_date: -1 }).limit(10).exec(function (err, posts) {
         event.sender.send('gotRecents', posts);
     });
@@ -231,7 +233,7 @@ ipcMain.on('getRecents', function (event, arg) {
 
 // get last 10 menus
 ipcMain.on('getMenus', function (event, arg) {
-    console.log('---------------------------000');
+    console.log('---------------------------main.js getMenus' );
     db.posts.find(arg).sort({ post_date: -1 }).limit(10).exec(function (err, menus) {
         event.sender.send('gotMenus', menus);
     });
