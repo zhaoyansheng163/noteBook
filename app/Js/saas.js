@@ -67,7 +67,7 @@ jQuery.fn.extend({
 				if(!flag){
 					$(this).unbind('click').bind('click',function(){
 						fn(this,_self);
-					}).attr('loaded','true').removeClass('folder').addClass('file');
+					}).attr('loaded','true').attr('id',id).removeClass('folder').addClass('file');
 					if($(this).parent().next().html()){
 						$(this).parent().removeClass();
 					}

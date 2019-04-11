@@ -491,26 +491,26 @@ ipcRenderer.on('gotMenus', function(event, dataV) {
                                         val:'Edit',
                                         ismy:1,
                                         cb:function(t) {
-                                            alert('edit');
+                                            alert('edit  '  + t.id + '  name:' + t.innerHTML);
                                         }
                                     },
                                     'pg_delete':{
                                         val:'Delete',
                                         ismy:1,
                                         cb:function(t) {
-                                            alert('delete');
+                                            alert('del  '  + t.id + '  name:' + t.innerHTML);
                                         }
                                     },
                                     'pg_add':{
                                         val:'Add',
                                         ismy:1,
                                         cb:function(t) {
-                                            alert('add');
+                                            alert('add  '  + t.id + '  name:' + t.innerHTML);
                                         }
                                     }
                                 
                             },callback:function(t){
-                                alert('this click');
+                                alert('click  ' + t.id + '  name:' + t.innerHTML);
                                 console.log(JSON.stringify(t));
                                 console.log(simpleStringify(this));
                             }});
