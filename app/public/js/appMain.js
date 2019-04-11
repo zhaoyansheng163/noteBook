@@ -505,12 +505,21 @@ ipcRenderer.on('gotMenus', function(event, dataV) {
                                         val:'Add',
                                         ismy:1,
                                         cb:function(t) {
-                                            alert('add  '  + t.id + '  name:' + t.innerHTML);
+                                            alert('add  '  + t.id + '  name:' + t.innerHTML + '    t.type:' + t.getAttribute('type'));
+                                            var el;
+                                            if(t.type=='0'){
+                                                el=document.getElementById('newpost');
+                                            }else{
+                                                el=document.getElementById('newmenu');
+                                            }
+                                            
+                                            //el.target = '_new'; //指定在新窗口打开
+                                            el.click();//触发打开事件
                                         }
                                     }
                                 
                             },callback:function(t){
-                                alert('click  ' + t.id + '  name:' + t.innerHTML);
+                                alert('click  ' + t.id + '  name:' + t.innerHTML+ '    t.type:' + t.getAttribute('type'));
                                 console.log(JSON.stringify(t));
                                 console.log(simpleStringify(this));
                             }});

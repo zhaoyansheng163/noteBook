@@ -22,7 +22,7 @@ jQuery.fn.extend({
 				var html='<div  style="height:450px;width:200px;overflow:auto"><ul class="treeview filetree" id="showTreeSelectParent">';
 				$.each(dataList,function(i,n){
 					if(n.pgid==0){
-						html+='<li class="expandable"><div class="hitarea"></div><span class="folder" val="'+n.id+'" loaded="false">'+n.name+'</span></li>';
+						html+='<li class="expandable"><div class="hitarea"></div><span class="folder" val="'+n.id+'" loaded="false" type="'+n.type+'">'+n.name+'</span></li>';
 					}
 				});
 				html+='</ul></div>';
@@ -35,7 +35,7 @@ jQuery.fn.extend({
 		else{
 			$.each(dataList,function(i,n){
 				if(n.pgid==0){
-					$(_self).append('<li class="expandable"><div class="hitarea"></div><span class="folder" val="'+n.id+'" loaded="false">'+n.name+'</span></li>');
+					$(_self).append('<li class="expandable"><div class="hitarea"></div><span class="folder" val="'+n.id+'" loaded="false" type="'+n.type+'">'+n.name+'</span></li>');
 				}
 			});
 			initTree($(_self));
@@ -55,6 +55,11 @@ jQuery.fn.extend({
 				}
 				
 				var id=$(this).attr('val');
+				var type=$(this).attr('type');
+				var fclass = 'folder';
+				if(type == '0'){
+					fclass='file';
+				}
 				var flag=false;
 				//判断是不是有子元素
 				$.each(dataList,function(i,n){
@@ -67,7 +72,7 @@ jQuery.fn.extend({
 				if(!flag){
 					$(this).unbind('click').bind('click',function(){
 						fn(this,_self);
-					}).attr('loaded','true').attr('id',id).removeClass('folder').addClass('file');
+					}).attr({'loaded':'true','id':id,'type':type}).removeClass('folder').addClass('file');
 					if($(this).parent().next().html()){
 						$(this).parent().removeClass();
 					}
@@ -120,16 +125,17 @@ jQuery.fn.extend({
 				fn(evt.data,_self);
 			}
 			var id=$(evt.data).attr('val');
+			var type=$(evt.data).attr('type');
 			var str='';
 			$.each(dataList,function(i,n){
 				if(n.pgid==id){
-					str+='<li class="expandable"><div class="hitarea"></div><span class="folder" val="'+n.id+'" loaded="false">'+n.name+'</span></li>';
+					str+='<li class="expandable"><div class="hitarea"></div><span class="folder" val="'+n.id+'" loaded="false" type="'+n.type+'">'+n.name+'</span></li>';
 				}
 			});
 			if(str){
 				$(evt.data).parent().append('<ul>'+str+'</ul>');
 			}
-			$(evt.data).attr('loaded','true');
+			$(evt.data).attr({'loaded':'true','id':id,'type':type});
 			$(evt.data).unbind('click',addChindList);
 			initTree($(evt.data).parent());
 		}	
