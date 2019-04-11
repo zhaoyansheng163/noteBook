@@ -21,8 +21,13 @@ jQuery.fn.extend({
     	$(this).click(function(){
 				var html='<div  style="height:450px;width:200px;overflow:auto"><ul class="treeview filetree" id="showTreeSelectParent">';
 				$.each(dataList,function(i,n){
+					var type=n.type;
+					var fclass = 'folder';
+					if(type == '0'){
+						fclass='file';
+					}
 					if(n.pgid==0){
-						html+='<li class="expandable"><div class="hitarea"></div><span class="folder" val="'+n.id+'" loaded="false" type="'+n.type+'">'+n.name+'</span></li>';
+						html+='<li class="expandable"><div class="hitarea"></div><span class="'+fclass+'" val="'+n.id+'" loaded="false" type="'+n.type+'">'+n.name+'</span></li>';
 					}
 				});
 				html+='</ul></div>';
@@ -34,8 +39,13 @@ jQuery.fn.extend({
 		}
 		else{
 			$.each(dataList,function(i,n){
+				var type=n.type;
+				var fclass = 'folder';
+				if(type == '0'){
+					fclass='file';
+				}
 				if(n.pgid==0){
-					$(_self).append('<li class="expandable"><div class="hitarea"></div><span class="folder" val="'+n.id+'" loaded="false" type="'+n.type+'">'+n.name+'</span></li>');
+					$(_self).append('<li class="expandable"><div class="hitarea"></div><span class="'+fclass+'" val="'+n.id+'" loaded="false" type="'+n.type+'">'+n.name+'</span></li>');
 				}
 			});
 			initTree($(_self));
@@ -70,9 +80,14 @@ jQuery.fn.extend({
 				});
 				//没有子元素
 				if(!flag){
-					$(this).unbind('click').bind('click',function(){
-						fn(this,_self);
-					}).attr({'loaded':'true','id':id,'type':type}).removeClass('folder').addClass('file');
+					if(type == '0'){ //文件才有点击方法
+						$(this).unbind('click').bind('click',function(){
+							fn(this,_self);
+						}).attr({'loaded':'true','id':id,'type':type});
+					}else{
+						$(this).attr({'loaded':'true','id':id,'type':type});
+					}
+
 					if($(this).parent().next().html()){
 						$(this).parent().removeClass();
 					}
@@ -125,17 +140,21 @@ jQuery.fn.extend({
 				fn(evt.data,_self);
 			}
 			var id=$(evt.data).attr('val');
-			var type=$(evt.data).attr('type');
 			var str='';
 			$.each(dataList,function(i,n){
+				var type=n.type;
+				var fclass = 'folder';
+				if(type == '0'){
+					fclass='file';
+				}
 				if(n.pgid==id){
-					str+='<li class="expandable"><div class="hitarea"></div><span class="folder" val="'+n.id+'" loaded="false" type="'+n.type+'">'+n.name+'</span></li>';
+					str+='<li class="expandable"><div class="hitarea"></div><span class="'+fclass+'" val="'+n.id+'" loaded="false" type="'+n.type+'">'+n.name+'</span></li>';
 				}
 			});
 			if(str){
 				$(evt.data).parent().append('<ul>'+str+'</ul>');
 			}
-			$(evt.data).attr({'loaded':'true','id':id,'type':type});
+			$(evt.data).attr({'loaded':'true','id':id});
 			$(evt.data).unbind('click',addChindList);
 			initTree($(evt.data).parent());
 		}	
