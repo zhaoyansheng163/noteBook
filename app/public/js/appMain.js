@@ -489,19 +489,25 @@ ipcRenderer.on('gotMenus', function (event, dataV) {
         $('#browser').showTree({
             data: data1, bindings: {
                 'pg_add': {
-                    val: '新建',
+                    val: '新建子层文档',
                     ismy: 1,
                     cb: function (t) {
-                        alert('add  ' + t.id + '  name:' + t.innerHTML + '    t.type:' + t.getAttribute('type'));
-                        var el;
-                        if (t.type == '0') {
-                            el = document.getElementById('newpost');
-                        } else {
-                            el = document.getElementById('newmenu');
-                        }
+                        alert('add  ' + t.id + '  name:' + t.innerHTML + '    t.type:' + t.getAttribute('type') );
+                        var el = document.getElementById('newpost');
+
+                        el.click();//触发打开事件
+                    }
+                },
+                'pg_addmenu': {
+                    val: '新建自文件夹',
+                    ismy: 1,
+                    cb: function (t) {
+                        alert('add  ' + t.id + '  name:' + t.innerHTML + '    t.type:' + t.getAttribute('type') );
+                        var el = document.getElementById('newmenu');
 
                         //el.target = '_new'; //指定在新窗口打开
                         el.click();//触发打开事件
+                        document.getElementById('pid').value=t.id;
                     }
                 },
                 'pg_delete': {
